@@ -7,6 +7,7 @@
  *
  * visible: (boolean) Don't hide the iframe by default.
  * sandbox: (array) Sandbox properties.
+ * document: (document) HTML Document we use to create the iframe element.
  *
  * @param {Element} el DOM element where the iframe should be added on.
  * @param {String} id A unique name/id for the iframe.
@@ -15,9 +16,11 @@
  * @api private
  */
 module.exports = function iframe(el, id, options) {
-  var i;
-
   options = options || {};
+
+  var doc = options.doc || options.document || document
+    , i;
+
   options.sandbox = options.sandbox || [
     'allow-pointer-lock',
     'allow-same-origin',
@@ -33,9 +36,9 @@ module.exports = function iframe(el, id, options) {
     // `i.name` as it will just ignore it. Creating it using this oddly <iframe>
     // element fixes these issues.
     //
-    i = document.createElement('<iframe name="'+ id +'">');
+    i = doc.createElement('<iframe name="'+ id +'">');
   } catch (e) {
-    i = document.createElement('iframe');
+    i = doc.createElement('iframe');
     i.name = id;
   }
 
@@ -115,7 +118,7 @@ module.exports = function iframe(el, id, options) {
      * @api private
      */
     attached: function attached() {
-      return !!document.getElementById(id);
+      return !!doc.getElementById(id);
     },
 
     /**
